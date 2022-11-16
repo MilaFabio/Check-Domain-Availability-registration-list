@@ -46,12 +46,15 @@ def main():
     # handle ctrl+c
     signal.signal(signal.SIGINT, signal_handler)
 
-    if args.domain:
-        check_domain(args.domain)
+#     if args.domain:
+#         check_domain(args.domain)
+#
+#     if args.file:
+#         check_list(args.file)
+#
+#
+# if __name__ == '__main__':
+#     main()
+# check_domain('remont-fotoapparatov-spb.ru/')
 
-    if args.file:
-        check_list(args.file)
-
-
-if __name__ == '__main__':
-    main()
+check_list('domains.txt')
