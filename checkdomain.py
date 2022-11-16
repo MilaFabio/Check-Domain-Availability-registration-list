@@ -7,6 +7,20 @@ import argparse
 import whois
 import signal
 import sys
+import datetime
+
+
+my_domains = 'domains.txt'
+my_path = 'result'
+
+now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
+result_filename = my_path + '/' + 'result_' + now + '.txt'
+
+
+f = open(result_filename, 'w')
+f.write('"Url"\n')
+f.close()
 
 # handle ctrl c
 def signal_handler(sig, frame):
@@ -18,17 +32,27 @@ def whois_domain(domain):
     try:
         whois.whois(domain)
         print('\033[0m' + "[+] %s already exist!" % domain)
+        return False
     except whois.parser.PywhoisError:
         print('\033[91m' + "[!] %s is available!" % domain)
+        return True
 
 # check domains from file
 def check_list(filename):
+    # получим объект файла
+    fileResult = open(result_filename, 'a')
+
     domains = []
     with open(filename) as f:
         domains = f.readlines()
 
     for domain in domains:
-        whois_domain(domain.strip())
+        check_d = whois_domain(domain.strip())
+        if check_d:
+            # my_str = domain + '\n'
+            fileResult.write(str(domain))
+
+    fileResult.close()
 
 # check single domain exist
 def check_domain(domain):
@@ -57,4 +81,4 @@ def main():
 #     main()
 # check_domain('remont-fotoapparatov-spb.ru/')
 
-check_list('domains.txt')
+check_list(my_domains)
